@@ -1,0 +1,10 @@
+
+https://github.com/xender1/smart-rockets/tree/master/smart%20rocket%20sdl
+
+https://natureofcode.com/genetic-algorithms/#genetic-algorithms-inspired-by-actual-events
+https://www.youtube.com/watch?v=bGz7mv2vD6g
+
+https://github.com/Rabbid76/PyGameExamplesAndAnswers/blob/master/documentation/pygame/pygame_surface_rotate.md
+https://realpython.com/asteroids-game-python/#step-4-controlling-game-objects
+
+https://pygame-gui.readthedocs.io/en/latest/quick_start.html
