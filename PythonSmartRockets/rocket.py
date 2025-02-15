@@ -30,8 +30,11 @@ class Rocket():
 
         self.is_alive = True
 
+        self.start_time = pygame.time.get_ticks()
+        self.curr_time = self.start_time
 
         self.cur_gene = 0
+
 
         self.genes: list[Gene] = []
         for i in range(self.settings.GENE_SIZE):
@@ -42,6 +45,16 @@ class Rocket():
 
     def update(self, screen: pygame.Surface) -> None:
         """Update position of the rocket"""
+
+        #check if we need to move to the next gene velocity
+        #see if the current genes time is up and if so move to the next one
+        self.curr_time = pygame.time.get_ticks() - self.start_time
+        if self.curr_time > self.genes[self.cur_gene].duration:
+            print("new gene")
+            self.setVelocityFromGenes()
+            self.start_time = pygame.time.get_ticks()
+            self.curr_time = self.start_time
+
         self.position = self.position + self.velocity
 
         self.rect.x = int(self.position.x)
@@ -78,3 +91,5 @@ class Rocket():
     def blitme(self, screen: pygame.Surface) -> None:
         """Draw to screen"""
         screen.blit(self.rotated_surface, self.rotated_rect)
+
+    

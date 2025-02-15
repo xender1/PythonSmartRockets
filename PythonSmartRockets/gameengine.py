@@ -3,6 +3,7 @@ from pygame.math import Vector2
 import sys
 
 from settings import Settings
+from textgui import TextGUI
 
 from rocket import Rocket
 from population import Population
@@ -17,15 +18,23 @@ class GameEngine:
         pygame.init()
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
+        self.screen_rect = self.screen.get_rect()
         pygame.display.set_caption(self.settings.caption)
+
+
+        #playing with images
+        self.my_message = TextGUI(self.screen, "Hello World", self.screen_rect.topleft)
 
 
         self.new_rock = Rocket(self.screen)
 
         self.new_pop = Population(self.screen)
 
-        print(len(self.new_pop.rockets))
+        self.target = pygame.Surface((60,60))
+        self.target_rect = self.target.get_rect()
 
+        #DEBUG
+        print(len(self.new_pop.rockets))
         for i in range(len(self.new_pop.rockets)):
             print(i)
             for j in range(len(self.new_pop.rockets[i].genes)):
@@ -87,6 +96,7 @@ class GameEngine:
         self.screen.fill(self.settings.black)
 
         #self.new_rock.blitme(self.screen)
+        self.my_message.draw_text(self.screen)
 
         for rock in self.new_pop.rockets:
             rock.blitme(self.screen)

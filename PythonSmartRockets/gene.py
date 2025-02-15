@@ -20,3 +20,5 @@ class Gene:
         self.velocity.y = -abs(random.randint(self.settings.MIN_VEL, self.settings.MAX_VEL))
         
         self.duration = random.randint(self.settings.MIN_DUR, self.settings.MAX_DUR)
+
+        
