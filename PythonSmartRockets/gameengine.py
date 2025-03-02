@@ -24,12 +24,12 @@ class GameEngine:
         #TODO: make font here and pass it in to TextGUI to reuse.
         self.my_message = TextGUI(self.screen, "Hello World", self.screen_rect.topleft)
 
-        self.test_rock = Rocket(self.screen, 123)
-        
+        #population of rockets        
         self.new_pop = Population(self.screen)
 
-        self.target = pygame.Surface((60,60))
-        self.target_rect = self.target.get_rect()
+        #simple target to hit
+        self.target = pygame.Rect(self.settings.screen_center.x, self.settings.screen_center.y - 300,
+                                                         35, 35)
 
         #DEBUG
         print(len(self.new_pop.rockets))
@@ -47,8 +47,6 @@ class GameEngine:
         while True:
             #check for events
             self._check_events()
-            
-            #self.test_rock.update(self.screen)
 
             #Check if all rockets are dead, if so restart pop
             #TODO: will be mutations first
@@ -104,8 +102,9 @@ class GameEngine:
         """Draw objects to screen"""
         self.screen.fill(self.settings.black)
 
-        #self.test_rock.blitme(self.screen)
         self.my_message.draw_text(self.screen)
+
+        pygame.draw.rect(self.screen, self.settings.purple, self.target)
 
         for rock in self.new_pop.rockets:
             rock.blitme(self.screen)

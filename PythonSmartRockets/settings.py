@@ -46,5 +46,5 @@ class Settings:
         self.red = (255, 0 , 0)
         self.green = (0, 255, 0)
         self.blue = (0,0, 255)
-        self.purple = (99, 14, 107)
+        self.purple = (128, 0, 128)
 
