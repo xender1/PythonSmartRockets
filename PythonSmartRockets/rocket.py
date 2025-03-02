@@ -8,9 +8,11 @@ from gene import Gene
 class Rocket():
     """Defines Rocket attributes"""
 
-    def __init__(self, screen: pygame.Surface) -> None:
+    def __init__(self, screen: pygame.Surface, rocket_num: int) -> None:
         """Init a rocket"""
         self.settings = Settings()
+
+        self.rocket_num = rocket_num
 
         self.surface = pygame.Surface(self.settings.R_SIZE, pygame.SRCALPHA)
         self.surface.fill(self.settings.white)
@@ -53,7 +55,7 @@ class Rocket():
         #see if the current genes time is up and if so move to the next one
         self.curr_time = pygame.time.get_ticks() - self.start_time
         if self.curr_time > self.genes[self.cur_gene].duration:
-            print("new gene")
+            print(f"{self.rocket_num}: new gene")
             self.setVelocityFromGenes()
             self.start_time = pygame.time.get_ticks()
             self.curr_time = self.start_time

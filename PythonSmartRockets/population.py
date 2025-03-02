@@ -18,7 +18,7 @@ class Population:
         self.rockets: list[Rocket] = []
 
         for i in range(self.settings.POP_SIZE):
-            self.rockets.append(Rocket(screen))
+            self.rockets.append(Rocket(screen, i))
 
 
     #TODO: im not sure this is needed (// there is a better way to write this)

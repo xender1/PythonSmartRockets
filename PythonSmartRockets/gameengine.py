@@ -24,7 +24,7 @@ class GameEngine:
         #TODO: make font here and pass it in to TextGUI to reuse.
         self.my_message = TextGUI(self.screen, "Hello World", self.screen_rect.topleft)
 
-        self.test_rock = Rocket(self.screen)
+        self.test_rock = Rocket(self.screen, 123)
         
         self.new_pop = Population(self.screen)
 
