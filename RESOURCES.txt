@@ -7,4 +7,9 @@ https://www.youtube.com/watch?v=bGz7mv2vD6g
 https://github.com/Rabbid76/PyGameExamplesAndAnswers/blob/master/documentation/pygame/pygame_surface_rotate.md
 https://realpython.com/asteroids-game-python/#step-4-controlling-game-objects
 
+https://stackoverflow.com/questions/29640685/how-do-i-detect-collision-in-pygame
+
+https://pygame.readthedocs.io/en/latest/4_text/text.html#initialize-a-font
+
+not used atm
 https://pygame-gui.readthedocs.io/en/latest/quick_start.html

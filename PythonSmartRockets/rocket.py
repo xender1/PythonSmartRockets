@@ -29,6 +29,7 @@ class Rocket():
         self.velocity = Vector2(0, 0)
 
         self.is_alive = True
+        self.hit_target = False
 
         self.start_time = pygame.time.get_ticks()
         self.curr_time = self.start_time
@@ -46,6 +47,8 @@ class Rocket():
     def update(self, screen: pygame.Surface) -> None:
         """Update position of the rocket"""
 
+        if self.is_alive == False:
+            return
         #check if we need to move to the next gene velocity
         #see if the current genes time is up and if so move to the next one
         self.curr_time = pygame.time.get_ticks() - self.start_time
@@ -62,15 +65,14 @@ class Rocket():
 
         self.checkWallCollision(screen)
 
-        #now we rotate the object based on velocity direction
-        #MATH!
+        #now we rotate the object based on velocity direction, MATH!
         self.angle = atan2(self.velocity.x, self.velocity.y) * 180 / pi
         self.rotated_surface = pygame.transform.rotate(self.surface, self.angle)
         self.rotated_rect = self.rotated_surface.get_rect(center=self.rect.center)
 
     def setVelocityFromGenes(self):
         """Set velocity from the next genes value"""
-        #TODO: need to check timer
+
         self.cur_gene += 1
         if self.cur_gene == self.settings.GENE_SIZE:
             self.cur_gene = 0
@@ -79,13 +81,35 @@ class Rocket():
 
 
     def checkWallCollision(self, screen: pygame.Surface):
-        """Check if the rocket hits a wall and stop it (currently reverse direction)"""
-        #TODO: should set is_alive to false
+        """Check if the rocket hits a wall and stop it"""
         #TODO: needs to be rotated rect
         if self.rect.left < 0 or self.rect.right > screen.get_width():
-            self.velocity.x *= -1
+            self.is_alive = False
+            #self.velocity.x *= -1
         if self.rect.top < 0 or self.rect.bottom > screen.get_height():
-            self.velocity.y *= -1
+            self.is_alive = False
+            #self.velocity.y *= -1
+
+
+    def restart(self, screen: pygame.Surface):
+        """restart all rockets to start pos/gene"""
+        self.position = Vector2(screen.get_rect().midbottom)
+        self.position.y -= self.settings.R_SIZE.y
+
+        self.rect.x = int(self.position.x)
+        self.rect.y = int(self.position.y)
+
+        self.is_alive = True
+        self.hit_target = False
+
+        self.start_time = pygame.time.get_ticks()
+        self.curr_time = self.start_time
+
+        self.cur_gene = 0
+
+        self.velocity = self.genes[self.cur_gene].velocity
+
+        
 
 
     def blitme(self, screen: pygame.Surface) -> None:

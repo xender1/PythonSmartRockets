@@ -17,6 +17,7 @@ class Gene:
     def randomize(self) -> None:
         """randomize velocity and duration"""
         self.velocity.x = random.randint(self.settings.MIN_VEL, self.settings.MAX_VEL)
+        #-abs because up for Y is a negative value and we dont want rockets going down
         self.velocity.y = -abs(random.randint(self.settings.MIN_VEL, self.settings.MAX_VEL))
         
         self.duration = random.randint(self.settings.MIN_DUR, self.settings.MAX_DUR)

@@ -21,13 +21,11 @@ class GameEngine:
         self.screen_rect = self.screen.get_rect()
         pygame.display.set_caption(self.settings.caption)
 
-
-        #playing with images
+        #TODO: make font here and pass it in to TextGUI to reuse.
         self.my_message = TextGUI(self.screen, "Hello World", self.screen_rect.topleft)
 
-
-        self.new_rock = Rocket(self.screen)
-
+        self.test_rock = Rocket(self.screen)
+        
         self.new_pop = Population(self.screen)
 
         self.target = pygame.Surface((60,60))
@@ -49,10 +47,17 @@ class GameEngine:
         while True:
             #check for events
             self._check_events()
+            
+            #self.test_rock.update(self.screen)
+
+            #Check if all rockets are dead, if so restart pop
+            #TODO: will be mutations first
+            if not self.new_pop.checkIsRunning():
+                self.new_pop.restart(self.screen)
 
             #update objects pos/values
-            self.new_rock.update(self.screen)
-
+            #TODO: move this into a population function
+            #   self.new_pop.update()
             for rock in self.new_pop.rockets:
                 rock.update(self.screen)
 
@@ -64,22 +69,26 @@ class GameEngine:
             seconds = (pygame.time.get_ticks() - self.start_tick) / 1000
             if seconds > 5:
                 print("5 seconds")
-
+                '''
+                DEBUG
                 for rock in self.new_pop.rockets:
                     rock.setVelocityFromGenes()
 
                 print(self.new_pop.rockets[0].velocity)
+                '''
                 self.start_tick = pygame.time.get_ticks()
+
 
 
     def _check_events(self) -> None:
         """Check for keyboard/mouse events"""
         for event in pygame.event.get():
-            #print(event)
             if event.type == pygame.QUIT:
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
                 self._check_keydown_events(event)
+            elif event.type == pygame.KEYUP:
+                self._check_keyup_events(event)
 
     def _check_keydown_events(self, event) -> None:
         """Process keydown events"""
@@ -95,7 +104,7 @@ class GameEngine:
         """Draw objects to screen"""
         self.screen.fill(self.settings.black)
 
-        #self.new_rock.blitme(self.screen)
+        #self.test_rock.blitme(self.screen)
         self.my_message.draw_text(self.screen)
 
         for rock in self.new_pop.rockets:

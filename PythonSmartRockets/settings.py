@@ -22,18 +22,18 @@ class Settings:
 
 
         #some population of rocket settings
-        self.POP_SIZE = 4
+        self.POP_SIZE = 8
         self.GENE_SIZE = 4
 
         #some rocket settings
-        self.R_SIZE = Vector2(10, 50)
+        self.R_SIZE = Vector2(5, 30)
 
         #some gene settings
-        self.MIN_VEL = -6
-        self.MAX_VEL = 6
+        self.MIN_VEL = -4
+        self.MAX_VEL = 4
 
-        self.MIN_DUR = 500
-        self.MAX_DUR = 5000
+        self.MIN_DUR = 100
+        self.MAX_DUR = 3000
 
 
 
