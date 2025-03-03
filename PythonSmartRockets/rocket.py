@@ -46,7 +46,7 @@ class Rocket():
         self.velocity = self.genes[self.cur_gene].velocity
 
 
-    def update(self, screen: pygame.Surface) -> None:
+    def update(self, screen: pygame.Surface, target: pygame.Rect) -> None:
         """Update position of the rocket"""
 
         if self.is_alive == False:
@@ -66,6 +66,7 @@ class Rocket():
         self.rect.y = int(self.position.y)
 
         self.checkWallCollision(screen)
+        self.checkTargetCollision(target)
 
         #now we rotate the object based on velocity direction, MATH!
         self.angle = atan2(self.velocity.x, self.velocity.y) * 180 / pi
@@ -91,6 +92,15 @@ class Rocket():
         if self.rect.top < 0 or self.rect.bottom > screen.get_height():
             self.is_alive = False
             #self.velocity.y *= -1
+
+    
+    def checkTargetCollision(self, target: pygame.Rect):
+        """Check if rocket hit the target and stop it"""
+
+        if self.rect.colliderect(target):
+            print(f"{self.rocket_num} hit target!")
+            self.is_alive = False
+            self.hit_target = True
 
 
     def restart(self, screen: pygame.Surface):

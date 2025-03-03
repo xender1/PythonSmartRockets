@@ -57,7 +57,7 @@ class GameEngine:
             #TODO: move this into a population function
             #   self.new_pop.update()
             for rock in self.new_pop.rockets:
-                rock.update(self.screen)
+                rock.update(self.screen, self.target)
 
 
             self._draw_screen()
