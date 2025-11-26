@@ -1,12 +1,21 @@
 import pygame
 from pygame.math import Vector2
 import sys
+from enum import Enum
 
 from settings import Settings
 from textgui import TextGUI
+from button import Button
 
 from rocket import Rocket
 from population import Population
+
+
+class GameState(Enum):
+    """Enum for game states"""
+    MENU = 1
+    PLAYING = 2
+    PAUSED = 3
 
 class GameEngine:
     """Overall class to handle game assets and behavior"""
@@ -30,7 +39,27 @@ class GameEngine:
 
         self.best_score = 0
 
-        #population of rockets        
+        # Game state
+        self.game_state = GameState.MENU
+
+        # Menu buttons (centered, Start above Exit)
+        center_x = self.settings.screen_width // 2
+        center_y = self.settings.screen_height // 2
+        self.start_button = Button(self.screen, "Start", (center_x, center_y - 40))
+        self.exit_button = Button(self.screen, "Exit", (center_x, center_y + 40))
+
+        # Resume button for pause screen
+        self.resume_button = Button(self.screen, "Resume", (center_x, center_y + 60))
+        
+        # Pause label (centered on screen)
+        self.pause_label = TextGUI(self.screen, "PAUSED", (center_x, center_y))
+        self.pause_label.font = pygame.font.SysFont("Arial", 48)
+        self.pause_label.update_text("PAUSED")
+        self.pause_label.msg_rect.center = (center_x, center_y)
+
+
+
+        #population of rockets
         self.new_pop = Population(self.screen)
 
         #simple target to hit
@@ -53,17 +82,18 @@ class GameEngine:
             #check for events
             self._check_events()
 
-            #Check if all rockets are dead, if so restart pop
-            #TODO: will be mutations first
-            if not self.new_pop.checkIsRunning():
-                self.new_pop.restart(self.screen, self.target)
+            # Only update game logic when playing
+            if self.game_state == GameState.PLAYING:
+                #Check if all rockets are dead, if so restart pop
+                #TODO: will be mutations first
+                if not self.new_pop.checkIsRunning():
+                    self.new_pop.restart(self.screen, self.target)
 
-            #update objects pos/values
-            #TODO: move this into a population function
-            #   self.new_pop.update()
-            for rock in self.new_pop.rockets:
-                rock.update(self.screen, self.target)
-
+                #update objects pos/values
+                #TODO: move this into a population function
+                #   self.new_pop.update()
+                for rock in self.new_pop.rockets:
+                    rock.update(self.screen, self.target)
 
             self._draw_screen()
 
@@ -93,21 +123,61 @@ class GameEngine:
                 self._check_keydown_events(event)
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                self._check_mouse_events(event)
 
     def _check_keydown_events(self, event) -> None:
         """Process keydown events"""
         if event.key == pygame.K_q:
-           sys.exit()
-    
+            sys.exit()
+        elif event.key == pygame.K_p:
+            # Toggle pause when playing or paused
+            if self.game_state == GameState.PLAYING:
+                self.game_state = GameState.PAUSED
+            elif self.game_state == GameState.PAUSED:
+                self.game_state = GameState.PLAYING
+
     def _check_keyup_events(self, event) -> None:
         """Process keyup events"""
         pass
+
+    def _check_mouse_events(self, event) -> None:
+        """Process mouse click events"""
+        mouse_pos = pygame.mouse.get_pos()
+
+        if self.game_state == GameState.MENU:
+            if self.start_button.is_clicked(mouse_pos):
+                self.game_state = GameState.PLAYING
+            elif self.exit_button.is_clicked(mouse_pos):
+                sys.exit()
+        elif self.game_state == GameState.PAUSED:
+            if self.resume_button.is_clicked(mouse_pos):
+                self.game_state = GameState.PLAYING
 
 
     def _draw_screen(self) -> None:
         """Draw objects to screen"""
         self.screen.fill(self.settings.black)
 
+        mouse_pos = pygame.mouse.get_pos()
+
+        if self.game_state == GameState.MENU:
+            self._draw_menu(mouse_pos)
+        elif self.game_state == GameState.PLAYING:
+            self._draw_game()
+        elif self.game_state == GameState.PAUSED:
+            self._draw_game()
+            self._draw_pause(mouse_pos)
+
+        pygame.display.flip()
+
+    def _draw_menu(self, mouse_pos) -> None:
+        """Draw main menu screen"""
+        self.start_button.draw(mouse_pos)
+        self.exit_button.draw(mouse_pos)
+
+    def _draw_game(self) -> None:
+        """Draw game elements"""
         # Update and draw generation counter
         self.generation_counter.update_text(f"Generation: {self.new_pop.generation}")
         self.generation_counter.draw_text(self.screen)
@@ -129,7 +199,10 @@ class GameEngine:
         for rock in self.new_pop.rockets:
             rock.blitme(self.screen)
 
-        pygame.display.flip()
+    def _draw_pause(self, mouse_pos) -> None:
+        """Draw pause overlay"""
+        self.pause_label.draw_text(self.screen)
+        self.resume_button.draw(mouse_pos)
 
 
 if __name__ == '__main__':
