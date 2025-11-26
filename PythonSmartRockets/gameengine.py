@@ -22,21 +22,26 @@ class GameEngine:
         pygame.display.set_caption(self.settings.caption)
 
         #TODO: make font here and pass it in to TextGUI to reuse.
-        self.my_message = TextGUI(self.screen, "Hello World", self.screen_rect.topleft)
+        self.generation_counter = TextGUI(self.screen, "Generation: 1", self.screen_rect.topleft)
+        self.best_score_label = TextGUI(self.screen, "Best Score: 0", (0, self.generation_counter.msg_rect.bottom))
+        self.title_label = TextGUI(self.screen, "Rocket Test", self.screen_rect.topright)
+        # Adjust position so text doesn't go off screen (anchor by topright instead of topleft)
+        self.title_label.msg_rect.topright = self.screen_rect.topright
 
-        self.test_rock = Rocket(self.screen, 123)
-        
+        self.best_score = 0
+
+        #population of rockets        
         self.new_pop = Population(self.screen)
 
-        self.target = pygame.Surface((60,60))
-        self.target_rect = self.target.get_rect()
+        #simple target to hit
+        self.target = pygame.Rect(self.settings.screen_center.x, self.settings.screen_center.y - 300,
+                                                         35, 35)
 
         #DEBUG
-        print(len(self.new_pop.rockets))
-        for i in range(len(self.new_pop.rockets)):
-            print(i)
-            for j in range(len(self.new_pop.rockets[i].genes)):
-                print(self.new_pop.rockets[i].genes[j].velocity)
+        print(f"Rocket count: {len(self.new_pop.rockets)}")
+        for i, rocket in enumerate(self.new_pop.rockets):
+            genes_info = [(g.direction, g.speed, g.duration) for g in rocket.genes]
+            print(f"Rocket {i} Genes: {genes_info}")
 
 
     def run_game(self) -> None:
@@ -47,37 +52,36 @@ class GameEngine:
         while True:
             #check for events
             self._check_events()
-            
-            #self.test_rock.update(self.screen)
 
             #Check if all rockets are dead, if so restart pop
             #TODO: will be mutations first
             if not self.new_pop.checkIsRunning():
-                self.new_pop.restart(self.screen)
+                self.new_pop.restart(self.screen, self.target)
 
             #update objects pos/values
             #TODO: move this into a population function
             #   self.new_pop.update()
             for rock in self.new_pop.rockets:
-                rock.update(self.screen)
+                rock.update(self.screen, self.target)
 
 
             self._draw_screen()
 
             self.clock.tick(self.settings.frame_rate)
 
+            '''
             seconds = (pygame.time.get_ticks() - self.start_tick) / 1000
             if seconds > 5:
                 print("5 seconds")
-                '''
+                
                 DEBUG
                 for rock in self.new_pop.rockets:
                     rock.setVelocityFromGenes()
 
                 print(self.new_pop.rockets[0].velocity)
-                '''
+                
                 self.start_tick = pygame.time.get_ticks()
-
+            '''
 
 
     def _check_events(self) -> None:
@@ -104,8 +108,23 @@ class GameEngine:
         """Draw objects to screen"""
         self.screen.fill(self.settings.black)
 
-        #self.test_rock.blitme(self.screen)
-        self.my_message.draw_text(self.screen)
+        # Update and draw generation counter
+        self.generation_counter.update_text(f"Generation: {self.new_pop.generation}")
+        self.generation_counter.draw_text(self.screen)
+
+        # Update best score from all rockets
+        for rock in self.new_pop.rockets:
+            if rock.score > self.best_score:
+                self.best_score = rock.score
+
+        # Draw best score
+        self.best_score_label.update_text(f"Best Score: {self.best_score}")
+        self.best_score_label.draw_text(self.screen)
+
+        # Draw title label
+        self.title_label.draw_text(self.screen)
+
+        pygame.draw.rect(self.screen, self.settings.purple, self.target)
 
         for rock in self.new_pop.rockets:
             rock.blitme(self.screen)
