@@ -1,6 +1,7 @@
 import pygame
 from pygame.math import Vector2
 from math import atan2, pi
+import random
 
 from settings import Settings
 from gene import Gene
@@ -15,7 +16,8 @@ class Rocket():
         self.rocket_num = rocket_num
 
         self.surface = pygame.Surface(self.settings.R_SIZE, pygame.SRCALPHA)
-        self.surface.fill(self.settings.white)
+        self.color = self._generate_random_color()
+        self.surface.fill(self.color)
         self.rect = self.surface.get_rect()
 
         self.rotated_surface = self.surface
@@ -167,11 +169,21 @@ class Rocket():
         self.direction = self.genes[self.cur_gene].direction
         self.speed = self.genes[self.cur_gene].speed
 
-        
+    def _generate_random_color(self) -> tuple:
+        """Generate a random color, excluding black and purple"""
+        while True:
+            r = random.randint(0, 255)
+            g = random.randint(0, 255)
+            b = random.randint(0, 255)
+            # Avoid black (all values low) and purple (high red + high blue, low green)
+            is_black = r < 50 and g < 50 and b < 50
+            is_purple = r > 100 and b > 100 and g < 80
+            if not is_black and not is_purple:
+                return (r, g, b)
+
 
 
     def blitme(self, screen: pygame.Surface) -> None:
         """Draw to screen"""
         screen.blit(self.rotated_surface, self.rotated_rect)
 
-    
