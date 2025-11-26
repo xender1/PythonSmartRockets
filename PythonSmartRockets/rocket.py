@@ -50,7 +50,7 @@ class Rocket():
         for i in range(self.settings.GENE_SIZE):
             self.genes.append(Gene())
 
-        self.direction = self.genes[self.cur_gene].direction
+        self.direction = Vector2(self.genes[self.cur_gene].direction.x, self.genes[self.cur_gene].direction.y)
         self.speed = self.genes[self.cur_gene].speed
 
 
@@ -67,7 +67,7 @@ class Rocket():
         #see if the current genes time is up and if so move to the next one
         self.curr_time = pygame.time.get_ticks() - self.start_time
         if self.curr_time > self.genes[self.cur_gene].duration:
-            print(f"{self.rocket_num}: new gene")
+            #print(f"{self.rocket_num}: new gene")
             self.setDirectionFromGenes()
             self.start_time = pygame.time.get_ticks()
             self.curr_time = self.start_time
@@ -98,7 +98,7 @@ class Rocket():
         if self.cur_gene == self.settings.GENE_SIZE:
             self.cur_gene = 0
 
-        self.direction = self.genes[self.cur_gene].direction
+        self.direction = Vector2(self.genes[self.cur_gene].direction.x, self.genes[self.cur_gene].direction.y)
         self.speed = self.genes[self.cur_gene].speed
 
 
@@ -117,7 +117,7 @@ class Rocket():
         """Check if rocket hit the target and stop it"""
 
         if self.rect.colliderect(target):
-            print(f"{self.rocket_num} hit target!")
+            #print(f"{self.rocket_num} hit target!")
             self.is_alive = False
             self.hit_target = True
 
@@ -143,7 +143,7 @@ class Rocket():
 
         self.score = int(max(1, min(100, distance_score + time_score)))
 
-        print(f"DScore: {distance_score}. TScore: {time_score}. Total: {self.score}.")
+        print(f"{self.rocket_num} DScore: {distance_score}. TScore: {time_score}. Total: {self.score}.")
 
     def restart(self, screen: pygame.Surface):
         """restart all rockets to start pos/gene"""
@@ -166,7 +166,7 @@ class Rocket():
         self.score = 0
         self.final_distance = 0
 
-        self.direction = self.genes[self.cur_gene].direction
+        self.direction = Vector2(self.genes[self.cur_gene].direction.x, self.genes[self.cur_gene].direction.y)
         self.speed = self.genes[self.cur_gene].speed
 
     def _generate_random_color(self) -> tuple:

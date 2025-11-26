@@ -22,8 +22,8 @@ class Settings:
 
 
         #some population of rocket settings
-        self.POP_SIZE = 8
-        self.GENE_SIZE = 4
+        self.POP_SIZE = 10
+        self.GENE_SIZE = 10
 
         #some rocket settings
         self.R_SIZE = Vector2(5, 30)
@@ -32,12 +32,14 @@ class Settings:
         self.MIN_VEL = -4
         self.MAX_VEL = 4
 
-        self.MIN_SPEED = 0
+        self.MIN_SPEED = 1
         self.MAX_SPEED = 5
 
         self.MIN_DUR = 100
         self.MAX_DUR = 3000
 
+        self.MUTATE_SINGLE_GENE_CHANCE = 10
+        self.MUTATE_ALL_GENE_CHANCE = 3
 
 
 

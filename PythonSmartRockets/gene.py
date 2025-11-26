@@ -17,12 +17,23 @@ class Gene:
 
     def randomize(self) -> None:
         """randomize direction, speed, and duration"""
-        self.direction.x = random.randint(self.settings.MIN_VEL, self.settings.MAX_VEL)
-        #-abs because up for Y is a negative value and we dont want rockets going down
-        self.direction.y = -abs(random.randint(self.settings.MIN_VEL, self.settings.MAX_VEL))
+        # Ensure direction is never (0, 0)
+        while True:
+            self.direction.x = random.randint(self.settings.MIN_VEL, self.settings.MAX_VEL)
+            #-abs because up for Y is a negative value and we dont want rockets going down
+            self.direction.y = -abs(random.randint(self.settings.MIN_VEL, self.settings.MAX_VEL))
+            if self.direction.x != 0 or self.direction.y != 0:
+                break
 
-        self.speed = random.uniform(self.settings.MIN_SPEED, self.settings.MAX_SPEED)
+        self.speed = random.randint(self.settings.MIN_SPEED, self.settings.MAX_SPEED)
 
         self.duration = random.randint(self.settings.MIN_DUR, self.settings.MAX_DUR)
 
-        
+    def copy(self) -> 'Gene':
+        """Create a copy of this gene"""
+        new_gene = Gene.__new__(Gene)
+        new_gene.settings = self.settings
+        new_gene.direction = Vector2(self.direction.x, self.direction.y)
+        new_gene.speed = self.speed
+        new_gene.duration = self.duration
+        return new_gene

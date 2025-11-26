@@ -38,11 +38,10 @@ class GameEngine:
                                                          35, 35)
 
         #DEBUG
-        print(len(self.new_pop.rockets))
-        for i in range(len(self.new_pop.rockets)):
-            print(i)
-            for j in range(len(self.new_pop.rockets[i].genes)):
-                print(self.new_pop.rockets[i].genes[j].direction)
+        print(f"Rocket count: {len(self.new_pop.rockets)}")
+        for i, rocket in enumerate(self.new_pop.rockets):
+            genes_info = [(g.direction, g.speed, g.duration) for g in rocket.genes]
+            print(f"Rocket {i} Genes: {genes_info}")
 
 
     def run_game(self) -> None:
@@ -57,7 +56,7 @@ class GameEngine:
             #Check if all rockets are dead, if so restart pop
             #TODO: will be mutations first
             if not self.new_pop.checkIsRunning():
-                self.new_pop.restart(self.screen)
+                self.new_pop.restart(self.screen, self.target)
 
             #update objects pos/values
             #TODO: move this into a population function
@@ -70,18 +69,19 @@ class GameEngine:
 
             self.clock.tick(self.settings.frame_rate)
 
+            '''
             seconds = (pygame.time.get_ticks() - self.start_tick) / 1000
             if seconds > 5:
                 print("5 seconds")
-                '''
+                
                 DEBUG
                 for rock in self.new_pop.rockets:
                     rock.setVelocityFromGenes()
 
                 print(self.new_pop.rockets[0].velocity)
-                '''
+                
                 self.start_tick = pygame.time.get_ticks()
-
+            '''
 
 
     def _check_events(self) -> None:
