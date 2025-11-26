@@ -32,6 +32,9 @@ class Settings:
         self.MIN_VEL = -4
         self.MAX_VEL = 4
 
+        self.MIN_SPEED = 0
+        self.MAX_SPEED = 5
+
         self.MIN_DUR = 100
         self.MAX_DUR = 3000
 

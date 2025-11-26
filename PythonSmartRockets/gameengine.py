@@ -22,7 +22,13 @@ class GameEngine:
         pygame.display.set_caption(self.settings.caption)
 
         #TODO: make font here and pass it in to TextGUI to reuse.
-        self.my_message = TextGUI(self.screen, "Hello World", self.screen_rect.topleft)
+        self.generation_counter = TextGUI(self.screen, "Generation: 1", self.screen_rect.topleft)
+        self.best_score_label = TextGUI(self.screen, "Best Score: 0", (0, self.generation_counter.msg_rect.bottom))
+        self.title_label = TextGUI(self.screen, "Rocket Test", self.screen_rect.topright)
+        # Adjust position so text doesn't go off screen (anchor by topright instead of topleft)
+        self.title_label.msg_rect.topright = self.screen_rect.topright
+
+        self.best_score = 0
 
         #population of rockets        
         self.new_pop = Population(self.screen)
@@ -36,7 +42,7 @@ class GameEngine:
         for i in range(len(self.new_pop.rockets)):
             print(i)
             for j in range(len(self.new_pop.rockets[i].genes)):
-                print(self.new_pop.rockets[i].genes[j].velocity)
+                print(self.new_pop.rockets[i].genes[j].direction)
 
 
     def run_game(self) -> None:
@@ -102,7 +108,21 @@ class GameEngine:
         """Draw objects to screen"""
         self.screen.fill(self.settings.black)
 
-        self.my_message.draw_text(self.screen)
+        # Update and draw generation counter
+        self.generation_counter.update_text(f"Generation: {self.new_pop.generation}")
+        self.generation_counter.draw_text(self.screen)
+
+        # Update best score from all rockets
+        for rock in self.new_pop.rockets:
+            if rock.score > self.best_score:
+                self.best_score = rock.score
+
+        # Draw best score
+        self.best_score_label.update_text(f"Best Score: {self.best_score}")
+        self.best_score_label.draw_text(self.screen)
+
+        # Draw title label
+        self.title_label.draw_text(self.screen)
 
         pygame.draw.rect(self.screen, self.settings.purple, self.target)
 

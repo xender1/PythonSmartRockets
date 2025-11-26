@@ -1,5 +1,6 @@
 import pygame
 from pygame.math import Vector2
+from typing import Tuple
 
 from settings import Settings
 
@@ -9,7 +10,7 @@ class TextGUI:
     """Class for displaying text to screen"""
 
     #font: Font
-    def __init__(self, screen: pygame.Surface, msg: str, pos) -> None:
+    def __init__(self, screen: pygame.Surface, msg: str, pos: Tuple[int, int]) -> None:
         """Basic text attributes"""
 
         #to display text on the screen:
@@ -28,6 +29,13 @@ class TextGUI:
         self.msg_surf = self.font.render(msg, True, self.txt_color)
         self.msg_rect = self.msg_surf.get_rect()
         self.msg_rect.topleft = pos
+        self.pos = pos
+
+    def update_text(self, msg: str) -> None:
+        """Update the text message"""
+        self.msg_surf = self.font.render(msg, True, self.txt_color)
+        self.msg_rect = self.msg_surf.get_rect()
+        self.msg_rect.topleft = self.pos
 
     def draw_text(self, screen: pygame.Surface) -> None:
         """Draw txt image to the screen"""
