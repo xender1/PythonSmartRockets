@@ -33,7 +33,7 @@ class GameEngine:
         #TODO: make font here and pass it in to TextGUI to reuse.
         self.generation_counter = TextGUI(self.screen, "Generation: 1", self.screen_rect.topleft)
         self.best_score_label = TextGUI(self.screen, "Best Score: 0", (0, self.generation_counter.msg_rect.bottom))
-        self.title_label = TextGUI(self.screen, "Rocket Test", self.screen_rect.topright)
+        self.title_label = TextGUI(self.screen, "Rocket Testing", self.screen_rect.topright)
         # Adjust position so text doesn't go off screen (anchor by topright instead of topleft)
         self.title_label.msg_rect.topright = self.screen_rect.topright
 
@@ -45,6 +45,13 @@ class GameEngine:
         # Menu buttons (centered, Start above Exit)
         center_x = self.settings.screen_width // 2
         center_y = self.settings.screen_height // 2
+
+        # Menu title label
+        self.menu_title = TextGUI(self.screen, "Rocket Testing", (center_x, center_y - 120))
+        self.menu_title.font = pygame.font.SysFont("Arial", 48)
+        self.menu_title.update_text("Rocket Testing")
+        self.menu_title.msg_rect.center = (center_x, center_y - 120)
+
         self.start_button = Button(self.screen, "Start", (center_x, center_y - 40))
         self.exit_button = Button(self.screen, "Exit", (center_x, center_y + 40))
 
@@ -173,6 +180,7 @@ class GameEngine:
 
     def _draw_menu(self, mouse_pos) -> None:
         """Draw main menu screen"""
+        self.menu_title.draw_text(self.screen)
         self.start_button.draw(mouse_pos)
         self.exit_button.draw(mouse_pos)
 
