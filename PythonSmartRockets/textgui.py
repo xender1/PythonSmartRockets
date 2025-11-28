@@ -9,8 +9,8 @@ from settings import Settings
 class TextGUI:
     """Class for displaying text to screen"""
 
-    #font: Font
-    def __init__(self, screen: pygame.Surface, msg: str, pos: Tuple[int, int]) -> None:
+    def __init__(self, screen: pygame.Surface, msg: str, pos: Tuple[int, int],
+                 font_name: str = "Arial", font_size: int = 18) -> None:
         """Basic text attributes"""
 
         #to display text on the screen:
@@ -23,7 +23,7 @@ class TextGUI:
         self.screen = screen
         self.screen_rect = self.screen.get_rect()
 
-        self.font = pygame.font.SysFont("Arial", 18)
+        self.font = pygame.font.SysFont(font_name, font_size)
         self.txt_color = self.settings.white
 
         self.msg_surf = self.font.render(msg, True, self.txt_color)
@@ -40,20 +40,3 @@ class TextGUI:
     def draw_text(self, screen: pygame.Surface) -> None:
         """Draw txt image to the screen"""
         self.screen.blit(self.msg_surf, self.msg_rect)
-
-
-    #TODO:
-    #just init basic stuff and then declare stuff like this
-    #this iss where we can figure out the rect size etc and place it correclty on screen
-    def prep_image(self):
-        pass
-    
-    def draw_top_left(self):
-        pass
-
-    def draw_top_right(self):
-        pass
-
-    def draw_at_location(self):
-        pass
-

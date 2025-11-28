@@ -22,7 +22,7 @@ class Gene:
             self.direction.x = random.randint(self.settings.MIN_VEL, self.settings.MAX_VEL)
             #-abs because up for Y is a negative value and we dont want rockets going down
             self.direction.y = -abs(random.randint(self.settings.MIN_VEL, self.settings.MAX_VEL))
-            if self.direction.x != 0 or self.direction.y != 0:
+            if self.direction.x != 0 and self.direction.y != 0:
                 break
 
         self.speed = random.randint(self.settings.MIN_SPEED, self.settings.MAX_SPEED)
