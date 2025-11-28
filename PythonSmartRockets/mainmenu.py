@@ -20,9 +20,7 @@ class MainMenu:
         center_y = self.settings.screen_height // 2
 
         # Menu title label
-        self.title = TextGUI(self.screen, "Rocket Testing", (center_x, center_y - 120))
-        self.title.font = pygame.font.SysFont("Arial", 48)
-        self.title.update_text("Rocket Testing")
+        self.title = TextGUI(self.screen, "Rocket Testing", (center_x, center_y - 120), "Arial", 48)
         self.title.msg_rect.center = (center_x, center_y - 120)
 
         # Buttons

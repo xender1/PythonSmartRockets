@@ -19,9 +19,7 @@ class PauseMenu:
         center_y = self.settings.screen_height // 2
 
         # Pause label
-        self.title = TextGUI(self.screen, "PAUSED", (center_x, center_y))
-        self.title.font = pygame.font.SysFont("Arial", 48)
-        self.title.update_text("PAUSED")
+        self.title = TextGUI(self.screen, "PAUSED", (center_x, center_y), "Arial", 48)
         self.title.msg_rect.center = (center_x, center_y)
 
         # Resume button
