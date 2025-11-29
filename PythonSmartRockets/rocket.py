@@ -1,6 +1,6 @@
 import pygame
 from pygame.math import Vector2
-from math import atan2, pi
+from math import atan2, pi, degrees, radians, cos, sin
 import random
 
 from settings import Settings
@@ -31,6 +31,7 @@ class Rocket():
         self.rect.y = int(self.position.y)
 
         self.direction = Vector2(0, 0)
+        self.target_direction = Vector2(0, 0)
         self.speed = 0
 
         self.is_alive = True
@@ -51,6 +52,7 @@ class Rocket():
             self.genes.append(Gene())
 
         self.direction = Vector2(self.genes[self.cur_gene].direction.x, self.genes[self.cur_gene].direction.y)
+        self.target_direction = Vector2(self.direction.x, self.direction.y)
         self.speed = self.genes[self.cur_gene].speed
 
 
@@ -72,6 +74,9 @@ class Rocket():
             self.start_time = pygame.time.get_ticks()
             self.curr_time = self.start_time
 
+        # Rotate towards target direction
+        self._rotate_towards_target()
+
         # Calculate velocity from direction and speed
         if self.direction.length() > 0:
             velocity = self.direction.normalize() * self.speed
@@ -92,15 +97,50 @@ class Rocket():
         self.rotated_rect = self.rotated_surface.get_rect(center=self.rect.center)
 
     def setDirectionFromGenes(self):
-        """Set direction and speed from the next genes value"""
+        """Set target direction and speed from the next genes value"""
 
         self.cur_gene += 1
         if self.cur_gene == self.settings.GENE_SIZE:
             self.cur_gene = 0
 
-        self.direction = Vector2(self.genes[self.cur_gene].direction.x, self.genes[self.cur_gene].direction.y)
+        self.target_direction = Vector2(self.genes[self.cur_gene].direction.x, self.genes[self.cur_gene].direction.y)
         self.speed = self.genes[self.cur_gene].speed
 
+    def _rotate_towards_target(self):
+        """Gradually rotate direction towards target_direction"""
+        if self.direction.length() == 0 or self.target_direction.length() == 0:
+            self.direction = Vector2(self.target_direction.x, self.target_direction.y)
+            return
+
+        # Get current and target angles
+        current_angle = atan2(self.direction.y, self.direction.x)
+        target_angle = atan2(self.target_direction.y, self.target_direction.x)
+
+        # Calculate angle difference
+        angle_diff = target_angle - current_angle
+
+        # Normalize to -pi to pi range
+        while angle_diff > pi:
+            angle_diff -= 2 * pi
+        while angle_diff < -pi:
+            angle_diff += 2 * pi
+
+        # Convert rotation speed from degrees to radians
+        max_rotation = radians(self.settings.ROTATION_SPEED)
+
+        # Rotate by at most max_rotation towards target
+        if abs(angle_diff) <= max_rotation:
+            # Close enough, snap to target
+            self.direction = Vector2(self.target_direction.x, self.target_direction.y)
+        else:
+            # Rotate towards target
+            if angle_diff > 0:
+                new_angle = current_angle + max_rotation
+            else:
+                new_angle = current_angle - max_rotation
+
+            # Convert angle back to direction vector
+            self.direction = Vector2(cos(new_angle), sin(new_angle)) * self.direction.length()
 
     def checkWallCollision(self, screen: pygame.Surface):
         """Check if the rocket hits a wall and stop it"""
@@ -167,6 +207,7 @@ class Rocket():
         self.final_distance = 0
 
         self.direction = Vector2(self.genes[self.cur_gene].direction.x, self.genes[self.cur_gene].direction.y)
+        self.target_direction = Vector2(self.direction.x, self.direction.y)
         self.speed = self.genes[self.cur_gene].speed
 
     def _generate_random_color(self) -> tuple:
