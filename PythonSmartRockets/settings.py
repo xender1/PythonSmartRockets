@@ -41,10 +41,10 @@ class Settings:
 
         self.MUTATE_SINGLE_GENE_CHANCE = 20
 
-        # Mutation tweak ranges
-        self.MUTATE_DIRECTION_RANGE = 1  # ±1 for direction x/y
-        self.MUTATE_SPEED_RANGE = 1      # ±1 for speed
-        self.MUTATE_DURATION_RANGE = 200 # ±200 for duration
+        # Mutation ranges
+        self.MUTATE_DIRECTION_RANGE = 2  # 2 for direction x/y
+        self.MUTATE_SPEED_RANGE = 2      # 2 for speed
+        self.MUTATE_DURATION_RANGE = 300 # 300 for duration
 
 
 
