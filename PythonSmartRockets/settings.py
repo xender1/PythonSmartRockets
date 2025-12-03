@@ -40,7 +40,11 @@ class Settings:
         self.MAX_DUR = 3000
 
         self.MUTATE_SINGLE_GENE_CHANCE = 20
-        self.MUTATE_ALL_GENE_CHANCE = 3
+
+        # Mutation tweak ranges
+        self.MUTATE_DIRECTION_RANGE = 1  # ±1 for direction x/y
+        self.MUTATE_SPEED_RANGE = 1      # ±1 for speed
+        self.MUTATE_DURATION_RANGE = 200 # ±200 for duration
 
 
 

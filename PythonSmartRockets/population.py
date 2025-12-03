@@ -4,7 +4,6 @@ from pygame.math import Vector2
 
 from settings import Settings
 from rocket import Rocket
-from gene import Gene
 
 #TODO: think about moving the Rockets update/draw to screen function in here \
 #instead of in the gameengine functions
@@ -93,17 +92,17 @@ class Population:
         """Create a child rocket from two parents"""
         child = Rocket(screen, rocket_num)
 
-        # For each gene, check for mutation first, then inherit from parents
+        # For each gene, inherit from parents
         for i in range(len(child.genes)):
-            # Chance to mutate into a new random gene
-            if random.randint(1, 100) <= self.settings.MUTATE_SINGLE_GENE_CHANCE:
-                print("Mutation")
-                child.genes[i] = Gene()  # New random gene
             # 70% chance from better parent, 30% from other
-            elif random.random() < 0.7:
+            if random.random() < 0.7:
                 child.genes[i] = better_parent.genes[i].copy()
             else:
                 child.genes[i] = other_parent.genes[i].copy()
+
+            # Chance to mutate the inherited gene
+            if random.randint(1, 100) <= self.settings.MUTATE_SINGLE_GENE_CHANCE:
+                child.genes[i].mutate()
 
         # Set initial direction and speed from first gene (copy to avoid reference issues)
         child.direction = Vector2(child.genes[0].direction.x, child.genes[0].direction.y)

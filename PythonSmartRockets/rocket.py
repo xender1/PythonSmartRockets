@@ -169,17 +169,17 @@ class Rocket():
         # Max possible distance (corner to corner of screen)
         max_distance = Vector2(self.settings.screen_width, self.settings.screen_height).length()
 
-        # Distance score: closer = higher (0-50 points)
-        distance_score = (1 - self.final_distance / max_distance) * 50
+        # Distance score: closer = higher (0-70 points)
+        distance_score = (1 - self.final_distance / max_distance) * 70
 
-        # Time score: faster = higher (0-50 points)
+        # Time score: faster = higher (0-30 points)
         # Assume max reasonable time is ~10 seconds at 60fps = 600 frames
         max_frames = 600
-        time_score = max(0, (1 - self.total_time / max_frames)) * 50
+        time_score = max(0, (1 - self.total_time / max_frames)) * 30
 
         # Bonus for hitting target
         if self.hit_target:
-            distance_score = 50  # Max distance score
+            distance_score = 70  # Max distance score
 
         self.score = int(max(1, min(100, distance_score + time_score)))
 

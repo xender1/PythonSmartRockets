@@ -1,2 +1,5 @@
 PythonSmartRockets/__pycache__/*
 .vscode/settings.json
+button_test.py
+PythonSmartRockets/mytodos.py
+PythonSmartRockets/PythonSmartRockets.code-workspace
