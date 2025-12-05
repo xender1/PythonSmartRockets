@@ -27,6 +27,7 @@ class Settings:
 
         #some rocket settings
         self.R_SIZE = Vector2(5, 30)
+        self.ROTATION_SPEED = 5  # Degrees per frame
 
         #some gene settings
         self.MIN_VEL = -4
@@ -38,8 +39,12 @@ class Settings:
         self.MIN_DUR = 100
         self.MAX_DUR = 3000
 
-        self.MUTATE_SINGLE_GENE_CHANCE = 10
-        self.MUTATE_ALL_GENE_CHANCE = 3
+        self.MUTATE_SINGLE_GENE_CHANCE = 20
+
+        # Mutation ranges
+        self.MUTATE_DIRECTION_RANGE = 2  # 2 for direction x/y
+        self.MUTATE_SPEED_RANGE = 2      # 2 for speed
+        self.MUTATE_DURATION_RANGE = 300 # 300 for duration
 
 
 

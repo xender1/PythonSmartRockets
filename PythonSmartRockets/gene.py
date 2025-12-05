@@ -31,9 +31,35 @@ class Gene:
 
     def copy(self) -> 'Gene':
         """Create a copy of this gene"""
-        new_gene = Gene.__new__(Gene)
+        new_gene = Gene.__new__(Gene) #skips __init__
         new_gene.settings = self.settings
         new_gene.direction = Vector2(self.direction.x, self.direction.y)
         new_gene.speed = self.speed
         new_gene.duration = self.duration
         return new_gene
+
+    def mutate(self) -> None:
+        """Slightly mutate gene values instead of fully randomizing"""
+        # Mutate direction, keep trying until we get a valid direction
+        while True:
+            new_x = self.direction.x + random.randint(-self.settings.MUTATE_DIRECTION_RANGE, self.settings.MUTATE_DIRECTION_RANGE)
+            new_y = self.direction.y + random.randint(-self.settings.MUTATE_DIRECTION_RANGE, self.settings.MUTATE_DIRECTION_RANGE)
+
+            # Keep direction in valid range
+            new_x = max(self.settings.MIN_VEL, min(self.settings.MAX_VEL, new_x))
+            # -abs because up for Y is a negative value and we dont want rockets going down
+            new_y = -abs(max(self.settings.MIN_VEL, min(self.settings.MAX_VEL, new_y)))
+
+            # Ensure direction is never (0, 0)
+            if new_x != 0 or new_y != 0:
+                self.direction.x = new_x
+                self.direction.y = new_y
+                break
+
+        # Mutate speed
+        self.speed += random.randint(-self.settings.MUTATE_SPEED_RANGE, self.settings.MUTATE_SPEED_RANGE)
+        self.speed = max(self.settings.MIN_SPEED, min(self.settings.MAX_SPEED, self.speed))
+
+        # Mutate duration
+        self.duration += random.randint(-self.settings.MUTATE_DURATION_RANGE, self.settings.MUTATE_DURATION_RANGE)
+        self.duration = max(self.settings.MIN_DUR, min(self.settings.MAX_DUR, self.duration))
