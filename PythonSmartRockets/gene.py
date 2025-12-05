@@ -40,17 +40,21 @@ class Gene:
 
     def mutate(self) -> None:
         """Slightly mutate gene values instead of fully randomizing"""
-        # Mutate direction
-        self.direction.x += random.randint(-self.settings.MUTATE_DIRECTION_RANGE, self.settings.MUTATE_DIRECTION_RANGE)
-        self.direction.y += random.randint(-self.settings.MUTATE_DIRECTION_RANGE, self.settings.MUTATE_DIRECTION_RANGE)
+        # Mutate direction, keep trying until we get a valid direction
+        while True:
+            new_x = self.direction.x + random.randint(-self.settings.MUTATE_DIRECTION_RANGE, self.settings.MUTATE_DIRECTION_RANGE)
+            new_y = self.direction.y + random.randint(-self.settings.MUTATE_DIRECTION_RANGE, self.settings.MUTATE_DIRECTION_RANGE)
 
-        # Keep direction in valid range
-        self.direction.x = max(self.settings.MIN_VEL, min(self.settings.MAX_VEL, self.direction.x))
-        self.direction.y = max(-self.settings.MAX_VEL, min(-self.settings.MIN_VEL, self.direction.y))
+            # Keep direction in valid range
+            new_x = max(self.settings.MIN_VEL, min(self.settings.MAX_VEL, new_x))
+            # -abs because up for Y is a negative value and we dont want rockets going down
+            new_y = -abs(max(self.settings.MIN_VEL, min(self.settings.MAX_VEL, new_y)))
 
-        # Ensure direction is never (0, 0)
-        if self.direction.x == 0 and self.direction.y == 0:
-            self.direction.y = -1
+            # Ensure direction is never (0, 0)
+            if new_x != 0 or new_y != 0:
+                self.direction.x = new_x
+                self.direction.y = new_y
+                break
 
         # Mutate speed
         self.speed += random.randint(-self.settings.MUTATE_SPEED_RANGE, self.settings.MUTATE_SPEED_RANGE)
