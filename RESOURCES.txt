@@ -13,3 +13,6 @@ https://pygame.readthedocs.io/en/latest/4_text/text.html#initialize-a-font
 
 not used atm
 https://pygame-gui.readthedocs.io/en/latest/quick_start.html
+
+Sprite:
+https://www.freepik.com/free-photos-vectors/rocket-sprite
