@@ -51,7 +51,7 @@ class Gene:
             new_y = -abs(max(self.settings.MIN_VEL, min(self.settings.MAX_VEL, new_y)))
 
             # Ensure direction is never (0, 0)
-            if new_x != 0 or new_y != 0:
+            if new_x != 0 and new_y != 0:
                 self.direction.x = new_x
                 self.direction.y = new_y
                 break
