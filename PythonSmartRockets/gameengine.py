@@ -3,6 +3,8 @@ import sys
 from enum import Enum
 
 from settings import Settings
+from assetmanager import AssetManager
+
 from mainmenu import MainMenu
 from pausemenu import PauseMenu
 from playingstate import PlayingState
@@ -27,6 +29,11 @@ class GameEngine:
         self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
         self.screen_rect = self.screen.get_rect()
         pygame.display.set_caption(self.settings.caption)
+
+        #load AssetManager/images
+        self.assets = AssetManager()
+        self.assets.load_sprite("rocket", "PythonSmartRockets/sprites/rocket.jpg",
+                                    colorkey=(255,255,255), scale=self.settings.R_SIZE)
 
         # Game state
         self.game_state = GameState.MENU

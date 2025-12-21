@@ -4,6 +4,7 @@ from math import atan2, pi, degrees, radians, cos, sin
 import random
 
 from settings import Settings
+from assetmanager import AssetManager
 from gene import Gene
 
 class Rocket():
@@ -15,9 +16,9 @@ class Rocket():
 
         self.rocket_num = rocket_num
 
-        self.surface = pygame.Surface(self.settings.R_SIZE, pygame.SRCALPHA)
-        self.color = self._generate_random_color()
-        self.surface.fill(self.color)
+        # Load sprite image
+        self.original_surface = AssetManager().get_sprite("rocket")
+        self.surface = self.original_surface
         self.rect = self.surface.get_rect()
 
         self.rotated_surface = self.surface
@@ -92,8 +93,10 @@ class Rocket():
         self.checkTargetCollision(target)
 
         #now we rotate the object based on direction, MATH!
-        self.angle = atan2(self.direction.x, self.direction.y) * 180 / pi
-        self.rotated_surface = pygame.transform.rotate(self.surface, self.angle)
+        #with sprite (and before even) add + 180 (pygame Y is inverted)
+        self.angle = atan2(self.direction.x, self.direction.y) * 180 / pi + 180
+        # Always rotate from original to avoid quality loss
+        self.rotated_surface = pygame.transform.rotate(self.original_surface, self.angle)
         self.rotated_rect = self.rotated_surface.get_rect(center=self.rect.center)
 
     def setDirectionFromGenes(self):

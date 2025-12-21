@@ -26,7 +26,7 @@ class Settings:
         self.GENE_SIZE = 10
 
         #some rocket settings
-        self.R_SIZE = Vector2(5, 30)
+        self.R_SIZE = Vector2(20, 37)
         self.ROTATION_SPEED = 5  # Degrees per frame
 
         #some gene settings
